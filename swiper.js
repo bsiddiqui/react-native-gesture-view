@@ -1,19 +1,37 @@
 import React, { Component } from 'react';
-import { PanResponder, View } from 'react-native';
+import { PanResponder, View, StyleSheet } from 'react-native';
 
 export default class Swiper extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = { quadrants : this.calculareQuadrants(props.quadrantThreshold) }
+  }
+
   static get propTypes () {
     return {
       content: React.PropTypes.element.isRequired,
-      onSwipeLeft: React.PropTypes.func.isRequired,
-      onSwipeRight: React.PropTypes.func.isRequired,
-      swipeThreshold: React.PropTypes.number
+      onSwipeLeft: React.PropTypes.func,
+      onSwipeRight: React.PropTypes.func,
+      onSwipeUp: React.PropTypes.func,
+      onSwipeDown: React.PropTypes.func,
+      onUnhanledSwipe: React.PropTypes.func,
+      swipeThreshold: React.PropTypes.number,
+      quadrantThreshold: React.PropTypes.number,
+      style: React.PropTypes.any
     }
   }
 
   static get defaultProps () {
     return {
-      swipeThreshold: 120
+      swipeThreshold: 120,
+      quadrantThreshold: 30
+    }
+  }
+
+  componentWillReceiveProps (newProps) {
+    if(newProps.quadrantThreshold !== this.props.quadrantThreshold) {
+      this.setState({ quadrants: this.calculareQuadrants(newProps.quadrantThreshold) })
     }
   }
 
@@ -25,18 +43,45 @@ export default class Swiper extends Component {
     })
   }
 
+  calculareQuadrants (threshold) {
+    return {
+      right: [0 + threshold, 0 - threshold],
+      up: [-90 + threshold, -90 - threshold],
+      down: [90 + threshold, 90 - threshold],
+      topLeft: [-180 + threshold, -180],
+      bottomLeft: [180, 180 - threshold]
+    }
+  }
+
+  isInsideQuadrant (quadrants, direction, angle) {
+    return angle >= quadrants[direction][1] && angle <= quadrants[direction][0]
+  }
+
   handleSwipe (object, gesture) {
-    if (Math.abs(gesture.dx) > this.props.swipeThreshold) {
-      if (gesture.dx > 0) {
-        this.props.onSwipeRight()
-      } else {
-        this.props.onSwipeLeft()
+    const angle = Math.atan2(gesture.dy, gesture.dx) * (180 / Math.PI)
+    const distance = Math.sqrt(Math.pow(gesture.dx, 2) + Math.pow(gesture.dy, 2))
+
+    if (distance > this.props.swipeThreshold) {
+      if (this.props.onSwipeUp && this.isInsideQuadrant(this.state.quadrants, 'up', angle)) {
+        this.props.onSwipeUp(distance, angle)
+      } else if (this.props.onSwipeDown && this.isInsideQuadrant(this.state.quadrants, 'down', angle)) {
+        this.props.onSwipeDown(distance, angle)
+      } else if (this.props.onSwipeRight && this.isInsideQuadrant(this.state.quadrants, 'right', angle)) {
+        this.props.onSwipeRight(distance, angle)
+      } else if (this.props.onSwipeLeft && this.isInsideQuadrant(this.state.quadrants, 'topLeft', angle)) {
+        this.props.onSwipeLeft(distance, angle)
+      } else if (this.props.onSwipeLeft && this.isInsideQuadrant(this.state.quadrants, 'bottomLeft', angle)) {
+        this.props.onSwipeLeft(distance, angle)
+      } else if (this.props.onUnhanledSwipe) {
+        this.props.onUnhanledSwipe(distance, angle)
       }
+    } else {
+      this.props.onUnhanledSwipe(distance, angle)
     }
   }
 
   render () {
-    return <View {...this._panResponder.panHandlers}>
+    return <View {...this._panResponder.panHandlers} style={this.props.style}>
       {this.props.content}
     </View>
   }
