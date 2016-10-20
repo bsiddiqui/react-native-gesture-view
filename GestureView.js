@@ -75,7 +75,7 @@ export default class GestureView extends Component {
       } else if (this.props.onUnhanledSwipe) {
         this.props.onUnhanledSwipe(distance, angle)
       }
-    } else {
+    } else if (this.props.onUnhanledSwipe) {
       this.props.onUnhanledSwipe(distance, angle)
     }
   }
