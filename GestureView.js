@@ -15,7 +15,7 @@ export default class GestureView extends Component {
       onSwipeRight: React.PropTypes.func,
       onSwipeUp: React.PropTypes.func,
       onSwipeDown: React.PropTypes.func,
-      onUnhanledSwipe: React.PropTypes.func,
+      onUnhandledSwipe: React.PropTypes.func,
       swipeThreshold: React.PropTypes.number,
       quadrantThreshold: React.PropTypes.number,
       style: React.PropTypes.any
@@ -72,11 +72,11 @@ export default class GestureView extends Component {
         this.props.onSwipeLeft(distance, angle)
       } else if (this.props.onSwipeLeft && this.isInsideQuadrant(this.state.quadrants, 'bottomLeft', angle)) {
         this.props.onSwipeLeft(distance, angle)
-      } else if (this.props.onUnhanledSwipe) {
-        this.props.onUnhanledSwipe(distance, angle)
+      } else if (this.props.onUnhandledSwipe) {
+        this.props.onUnhandledSwipe(distance, angle)
       }
-    } else if (this.props.onUnhanledSwipe) {
-      this.props.onUnhanledSwipe(distance, angle)
+    } else if (this.props.onUnhandledSwipe) {
+      this.props.onUnhandledSwipe(distance, angle)
     }
   }
 
