@@ -1,6 +1,6 @@
 {
   "name": "react-native-gesture-view",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A View component with swipe gestures",
   "main": "GestureView.js",
   "scripts": {
