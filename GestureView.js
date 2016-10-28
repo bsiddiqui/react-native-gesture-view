@@ -10,7 +10,7 @@ export default class GestureView extends Component {
 
   static get propTypes () {
     return {
-      content: React.PropTypes.element.isRequired,
+      children: React.PropTypes.element.isRequired,
       onSwipeLeft: React.PropTypes.func,
       onSwipeRight: React.PropTypes.func,
       onSwipeUp: React.PropTypes.func,
@@ -38,7 +38,8 @@ export default class GestureView extends Component {
   componentWillMount () {
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) =>
+        gestureState.dx !== 0 || gestureState.dy !== 0,
       onPanResponderRelease: (...args) => this.handleSwipe(...args)
     })
   }
@@ -81,8 +82,10 @@ export default class GestureView extends Component {
   }
 
   render () {
-    return <View {...this._panResponder.panHandlers} style={this.props.style}>
-      {this.props.content}
-    </View>
+    return (
+      <View {...this._panResponder.panHandlers} style={this.props.style}>
+        {this.props.children}
+      </View>
+    )
   }
 }
