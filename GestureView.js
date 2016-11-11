@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { PanResponder, View } from 'react-native'
+import omit from 'lodash.omit'
 
 export default class GestureView extends Component {
   constructor (props) {
@@ -16,9 +17,11 @@ export default class GestureView extends Component {
       onSwipeUp: React.PropTypes.func,
       onSwipeDown: React.PropTypes.func,
       onUnhandledSwipe: React.PropTypes.func,
+      onPanStart: React.PropTypes.func,
+      onPan: React.PropTypes.func,
+      onPanEnd: React.PropTypes.func,
       swipeThreshold: React.PropTypes.number,
-      quadrantThreshold: React.PropTypes.number,
-      style: React.PropTypes.any
+      quadrantThreshold: React.PropTypes.number
     }
   }
 
@@ -40,7 +43,12 @@ export default class GestureView extends Component {
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: (evt, gestureState) =>
         gestureState.dx !== 0 || gestureState.dy !== 0,
-      onPanResponderRelease: (...args) => this.handleSwipe(...args)
+      onPanResponderRelease: (...args) => {
+        this.handleSwipe(...args)
+        this.handlePanEnd(...args)
+      },
+      onPanResponderMove: (...args) => this.handlePan(...args),
+      onPanResponderGrant: (...args) => this.handlePanStart(...args)
     })
   }
 
@@ -56,6 +64,18 @@ export default class GestureView extends Component {
 
   isInsideQuadrant (quadrants, direction, angle) {
     return angle >= quadrants[direction][1] && angle <= quadrants[direction][0]
+  }
+
+  handlePanEnd (...args) {
+    return this.props.onPanEnd && this.props.onPanEnd(...args)
+  }
+
+  handlePanStart (...args) {
+    return this.props.onPanStart && this.props.onPanStart(...args)
+  }
+
+  handlePan (...args) {
+    return this.props.onPan && this.props.onPan(...args)
   }
 
   handleSwipe (object, gesture) {
@@ -83,7 +103,9 @@ export default class GestureView extends Component {
 
   render () {
     return (
-      <View {...this._panResponder.panHandlers} style={this.props.style}>
+      <View
+        {...this._panResponder.panHandlers}
+        {...omit(this.props, Object.keys(GestureView.propTypes))}>
         {this.props.children}
       </View>
     )

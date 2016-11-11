@@ -35,5 +35,8 @@
   "bugs": {
     "url": "https://github.com/estate/react-native-gesture-view/issues",
     "homepage": "https://github.com/estate/react-native-gesture-view"
+  },
+  "dependencies": {
+    "lodash.omit": "^4.5.0"
   }
 }
