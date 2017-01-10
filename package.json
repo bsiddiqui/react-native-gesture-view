@@ -1,6 +1,6 @@
 {
   "name": "react-native-gesture-view",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A View component with swipe gestures",
   "main": "GestureView.js",
   "scripts": {
@@ -33,7 +33,7 @@
     "react-test-renderer": "15.3.2"
   },
   "bugs": {
-    "url": "https://github.com/estate/react-native-gesture-view/issues",
-    "homepage": "https://github.com/estate/react-native-gesture-view"
-  }
+    "url": "https://github.com/estate/react-native-gesture-view/issues"
+  },
+  "homepage": "https://github.com/estate/react-native-gesture-view"
 }
