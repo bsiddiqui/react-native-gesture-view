@@ -44,6 +44,13 @@ export default class GestureView extends Component {
     })
   }
 
+  /**
+   * Calculate all quadrants used as delimiters for detecting the swipe direction
+   * @param {Number} [threshold=defaultProps.quadrantTreshholds] A threshold for
+   * all quadrants. A swipe ended inside a threshold don't trigger a swipe
+   * @return {Object} An object containing all 5 quadrants with a stating angle
+   * and an end angle
+   */
   calculateQuadrants (threshold) {
     return {
       right: [0 + threshold, 0 - threshold],
@@ -54,11 +61,23 @@ export default class GestureView extends Component {
     }
   }
 
+  /**
+   * Checks if an angle is inside a specific quadrant
+   * @param {Object} quadrants An object containing all possible quadrants
+   * @param {String} direction The swipe direction
+   * @param {Number} angle The swipe angle
+   * @return {Boolean}
+   */
   isInsideQuadrant (quadrants, direction, angle) {
     return angle >= quadrants[direction][1] && angle <= quadrants[direction][0]
   }
 
-  handleSwipe (object, gesture) {
+  /**
+   * Handles a onPanResonderRelease triggering the correct prop
+   * @param {Object} pan The object returned from View.onPanResponderRelease
+   * @param {Object} gesture The gesture info returned from View.onPanResponderRelease
+   */
+  handleSwipe (pan, gesture) {
     const angle = Math.atan2(gesture.dy, gesture.dx) * (180 / Math.PI)
     const distance = Math.sqrt(Math.pow(gesture.dx, 2) + Math.pow(gesture.dy, 2))
 
