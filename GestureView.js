@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types';
 import { PanResponder, View } from 'react-native'
 
 export default class GestureView extends Component {
@@ -10,15 +11,15 @@ export default class GestureView extends Component {
 
   static get propTypes () {
     return {
-      children: React.PropTypes.element.isRequired,
-      onSwipeLeft: React.PropTypes.func,
-      onSwipeRight: React.PropTypes.func,
-      onSwipeUp: React.PropTypes.func,
-      onSwipeDown: React.PropTypes.func,
-      onUnhandledSwipe: React.PropTypes.func,
-      swipeThreshold: React.PropTypes.number,
-      quadrantThreshold: React.PropTypes.number,
-      style: React.PropTypes.any
+      children: PropTypes.element.isRequired,
+      onSwipeLeft: PropTypes.func,
+      onSwipeRight: PropTypes.func,
+      onSwipeUp: PropTypes.func,
+      onSwipeDown: PropTypes.func,
+      onUnhandledSwipe: PropTypes.func,
+      swipeThreshold: PropTypes.number,
+      quadrantThreshold: PropTypes.number,
+      style: PropTypes.any
     }
   }
 

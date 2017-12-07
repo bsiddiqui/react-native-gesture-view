@@ -35,5 +35,8 @@
   "bugs": {
     "url": "https://github.com/estate/react-native-gesture-view/issues"
   },
-  "homepage": "https://github.com/estate/react-native-gesture-view"
+  "homepage": "https://github.com/estate/react-native-gesture-view",
+  "dependencies": {
+    "prop-types": "^15.6.0"
+  }
 }
