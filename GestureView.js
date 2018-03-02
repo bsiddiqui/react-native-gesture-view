@@ -37,10 +37,13 @@ export default class GestureView extends Component {
   }
 
   componentWillMount () {
+    const touchThreshold = 20;
     this._panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: (evt, gestureState) =>
-        gestureState.dx !== 0 || gestureState.dy !== 0,
+      onStartShouldSetPanResponder: () => false,
+      onMoveShouldSetPanResponder: (evt, gestureState) =>{
+        const {dx, dy} = gestureState;
+        return (Math.abs(dx) > touchThreshold) || (Math.abs(dy) > touchThreshold);
+      },
       onPanResponderRelease: (...args) => this.handleSwipe(...args)
     })
   }
